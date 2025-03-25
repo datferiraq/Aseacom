@@ -20,6 +20,7 @@
       color: #fff;
       padding: 15px;
       font-size: 24px;
+      text-align: center;
     }
     .container {
       padding: 20px;
@@ -92,21 +93,20 @@
       border-bottom: 1px solid #eee;
       word-wrap: break-word;
       transition: background 0.3s ease;
+      background: #f9f9f9;
+      border-radius: 6px;
     }
     .result-item:hover {
       background: #f0f0f0;
     }
-    .result-item span {
-      display: block;
-      margin: 6px 0;
+    .result-item div {
+      margin: 8px 0;
       font-size: 16px;
     }
-    .result-item a {
+    .result-item .label {
+      font-weight: 700;
+      margin-right: 5px;
       color: #5563DE;
-      text-decoration: none;
-    }
-    .result-item a:hover {
-      text-decoration: underline;
     }
     .copy-btn {
       background: #5563DE;
@@ -212,7 +212,6 @@
     async function verifyCode() {
       const userCode = document.getElementById("userCode").value.trim().toUpperCase();
       const querySnapshot = await getDocs(collection(db, "codes"));
-
       let isValid = false;
       querySnapshot.forEach((doc) => {
         const data = doc.data();
@@ -220,9 +219,8 @@
           isValid = true;
         }
       });
-
       if (isValid) {
-        alert("✅ الكود صحيح! سيتم توجيهك الآن.");
+        alert(" الكود صحيح! سيتم توجيهك الآن.");
         showSearchApp();
       } else {
         document.getElementById("error").innerText = "❌ الكود غير صحيح أو تم تعطيله.";
@@ -251,6 +249,7 @@
       </div>
     </div>
   </div>
+
   <div id="searchApp" style="display: none;">
     <header>داتابيس فيسبوك @caser7</header>
     <div class="container">
@@ -269,6 +268,7 @@
       </div>
     </div>
   </div>
+
   <script>
     let file, chunkSize = 1024 * 1024, offset = 0, remainder = "", query = "";
     let matchCount = 0;
@@ -360,39 +360,40 @@
           let html = "";
           let copyText = "";
 
+          // يمكن تعديل تسميات الحقول حسب الحاجة
           if(fields[0] && fields[0].trim() !== "") {
-            html += "<span><i class='fas fa-calendar-alt'></i> تاريخ العقد: " + fields[0].trim() + "</span>";
-            copyText += "تاريخ العقد: " + fields[0].trim() + "\n";
+            html += "<div><span class='label'>الاسم:</span> " + fields[0].trim() + "</div>";
+            copyText += "الاسم: " + fields[0].trim() + "\n";
           }
           if(fields[1] && fields[1].trim() !== "") {
-            html += "<span><i class='fas fa-id-card'></i> تاريخ الهوية: " + fields[1].trim() + "</span>";
-            copyText += "تاريخ الهوية: " + fields[1].trim() + "\n";
+            html += "<div><span class='label'>التفعيل:</span> " + fields[1].trim() + "</div>";
+            copyText += "التفعيل: " + fields[1].trim() + "\n";
           }
           if(fields[2] && fields[2].trim() !== "") {
-            html += "<span><i class='fas fa-birthday-cake'></i> تاريخ الميلاد: " + fields[2].trim() + "</span>";
-            copyText += "تاريخ الميلاد: " + fields[2].trim() + "\n";
+            html += "<div><span class='label'>رقم الهاتف:</span> " + fields[2].trim() + "</div>";
+            copyText += "رقم الهاتف: " + fields[2].trim() + "\n";
           }
           if(fields[3] && fields[3].trim() !== "") {
-            html += "<span><i class='fas fa-phone'></i> رقم الهاتف: " + fields[3].trim() + "</span>";
-            copyText += "رقم الهاتف: " + fields[3].trim() + "\n";
+            html += "<div><span class='label'>المحافظة/المدينة:</span> " + fields[3].trim() + "</div>";
+            copyText += "المحافظة/المدينة: " + fields[3].trim() + "\n";
           }
           if(fields[4] && fields[4].trim() !== "") {
-            html += "<span><i class='fas fa-comment'></i> التعليق: " + fields[4].trim() + "</span>";
-            copyText += "التعليق: " + fields[4].trim() + "\n";
+            html += "<div><span class='label'>تاريخ الميلاد:</span> " + fields[4].trim() + "</div>";
+            copyText += "تاريخ الميلاد: " + fields[4].trim() + "\n";
           }
           if(fields[5] && fields[5].trim() !== "") {
-            html += "<span><i class='fas fa-map-marker-alt'></i> المحافظة/المدينة: " + fields[5].trim() + "</span>";
-            copyText += "المحافظة/المدينة: " + fields[5].trim() + "\n";
+            html += "<div><span class='label'>تعليق:</span> " + fields[5].trim() + "</div>";
+            copyText += "تعليق: " + fields[5].trim() + "\n";
           }
           if(fields[6] && fields[6].trim() !== "") {
-            html += "<span><i class='fas fa-user'></i> الاسم أو الحقل المخصص: " + fields[6].trim() + "</span>";
-            copyText += "الاسم أو الحقل المخصص: " + fields[6].trim() + "\n";
+            html += "<div><span class='label'>تفاصيل إضافية 1:</span> " + fields[6].trim() + "</div>";
+            copyText += "تفاصيل إضافية 1: " + fields[6].trim() + "\n";
           }
 
           for(let i = 7; i < fields.length; i++){
             if(fields[i] && fields[i].trim() !== "") {
-              html += "<span><i class='fas fa-info-circle'></i> معلومة إضافية " + (i - 6) + ": " + fields[i].trim() + "</span>";
-              copyText += "معلومة إضافية " + (i - 6) + ": " + fields[i].trim() + "\n";
+              html += "<div><span class='label'>تفاصيل إضافية " + (i - 5) + ":</span> " + fields[i].trim() + "</div>";
+              copyText += "تفاصيل إضافية " + (i - 5) + ": " + fields[i].trim() + "\n";
             }
           }
 
