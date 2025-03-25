@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>داتابيس فيسبوك</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Cairo', sans-serif;
+      background: #f7f7f7;
+      color: #333;
+      direction: rtl;
+    }
+    header {
+      background: #5563DE;
+      color: #fff;
+      padding: 15px;
+      font-size: 24px;
+    }
+    .container {
+      padding: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .section {
+      margin-bottom: 20px;
+    }
+    .upload-section,
+    .search-section {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    .upload-section:hover,
+    .search-section:hover {
+      transform: scale(1.02);
+    }
+    .hidden {
+      display: none;
+    }
+    input[type="file"],
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #5563DE;
+      border: none;
+      border-radius: 4px;
+      color: #fff;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #3e4abb;
+    }
+    #progressContainer {
+      width: 100%;
+      background: #ddd;
+      border-radius: 10px;
+      overflow: hidden;
+      height: 20px;
+      margin: 15px 0;
+    }
+    #progressBar {
+      height: 100%;
+      width: 0%;
+      background: #28a745;
+      transition: width 0.2s ease;
+    }
+    .results {
+      margin-top: 20px;
+      max-height: 500px;
+      overflow-y: auto;
+    }
+    .result-item {
+      margin-bottom: 30px;
+      padding: 15px;
+      border-bottom: 1px solid #eee;
+      word-wrap: break-word;
+      transition: background 0.3s ease;
+    }
+    .result-item:hover {
+      background: #f0f0f0;
+    }
+    .result-item span {
+      display: block;
+      margin: 6px 0;
+      font-size: 16px;
+    }
+    .result-item a {
+      color: #5563DE;
+      text-decoration: none;
+    }
+    .result-item a:hover {
+      text-decoration: underline;
+    }
+    .copy-btn {
+      background: #5563DE;
+      border: none;
+      color: #fff;
+      padding: 6px 12px;
+      margin-top: 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.3s ease;
+    }
+    .copy-btn:hover {
+      background: #3e4abb;
+    }
+    .back-button {
+      margin-bottom: 15px;
+      color: #5563DE;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .back-button:hover {
+      text-decoration: underline;
+    }
+    @media (max-width: 600px) {
+      header { font-size: 20px; }
+      button { font-size: 16px; }
+    }
+    #loginContainer {
+      font-family: 'Cairo', sans-serif;
+      text-align: center;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    #loginContainer .container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+    #loginContainer h2 { font-size: 24px; margin-bottom: 20px; }
+    #loginContainer label { display: block; margin-bottom: 10px; font-size: 18px; }
+    #loginContainer input { 
+      width: 100%; 
+      padding: 12px; 
+      border: none; 
+      border-radius: 5px; 
+      margin-bottom: 15px; 
+      font-size: 18px; 
+      text-align: center; 
+      background: rgba(255, 255, 255, 0.2); 
+      color: white; 
+    }
+    #loginContainer input::placeholder { color: rgba(255, 255, 255, 0.7); }
+    #loginContainer button { 
+      width: 100%; 
+      padding: 12px; 
+      border: none; 
+      border-radius: 5px; 
+      cursor: pointer; 
+      font-size: 18px; 
+      background: #4CAF50; 
+      color: white; 
+      transition: 0.3s; 
+    }
+    #loginContainer button:hover { background: #45a049; }
+    #loginContainer #error { 
+      color: #ff4d4d; 
+      margin-top: 10px; 
+      font-size: 16px; 
+      font-weight: bold; 
+    }
+    #loginContainer .footer { 
+      margin-top: 20px; 
+      font-size: 14px; 
+      color: #ddd; 
+    }
+    #loginContainer .footer a { color: #ffcc00; text-decoration: none; font-weight: bold; }
+  </style>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAzeOYd4_rppBX_qvYOvgXj6le6FEyO1ac",
+      authDomain: "database-87036.firebaseapp.com",
+      projectId: "database-87036",
+      storageBucket: "database-87036.firebasestorage.app",
+      messagingSenderId: "147777098452",
+      appId: "1:147777098452:web:c1c4c305d5e6e0cf0c2141",
+      measurementId: "G-8S0XCNF1Y7"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function verifyCode() {
+      const userCode = document.getElementById("userCode").value.trim().toUpperCase();
+      const querySnapshot = await getDocs(collection(db, "codes"));
+
+      let isValid = false;
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        if (data.code === userCode && data.isActive) {
+          isValid = true;
+        }
+      });
+
+      if (isValid) {
+        alert("✅ الكود صحيح! سيتم توجيهك الآن.");
+        showSearchApp();
+      } else {
+        document.getElementById("error").innerText = "❌ الكود غير صحيح أو تم تعطيله.";
+      }
+    }
+
+    window.verifyCode = verifyCode;
+
+    function showSearchApp() {
+      document.getElementById("loginContainer").style.display = "none";
+      document.getElementById("searchApp").style.display = "block";
+    }
+  </script>
+</head>
+<body>
+  <div id="loginContainer">
+    <div class="container">
+      <h2>تسجيل الدخول</h2>
+      <label for="userCode">كود التفعيل:</label>
+      <input type="text" id="userCode" placeholder="أدخل كود التفعيل">
+      <button onclick="verifyCode()">تسجيل الدخول</button>
+      <div id="error"></div>
+      <div class="footer">
+        للحصول على كود تفعيل تواصل مع المطور 
+        <a href="https://t.me/caser7" target="_blank">telegram:@caser7</a>
+      </div>
+    </div>
+  </div>
+  <div id="searchApp" style="display: none;">
+    <header>داتابيس فيسبوك @caser7</header>
+    <div class="container">
+      <div class="section upload-section" id="uploadSection">
+        <input type="file" id="fileInput" accept=".txt">
+      </div>
+      <div class="section search-section hidden" id="searchSection">
+        <div class="back-button" id="backButton">&#8592; رجوع</div>
+        <input type="text" id="searchBox" placeholder="اكتب ما تريد البحث عنه">
+        <button id="searchBtn">بحث</button>
+        <div id="progressContainer">
+          <div id="progressBar"></div>
+        </div>
+        <div id="resultCount" style="margin-bottom: 10px; font-size: 18px; font-weight: bold;"></div>
+        <div class="results" id="results"></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    let file, chunkSize = 1024 * 1024, offset = 0, remainder = "", query = "";
+    let matchCount = 0;
+    const fileInput = document.getElementById("fileInput");
+    const uploadSection = document.getElementById("uploadSection");
+    const searchSection = document.getElementById("searchSection");
+    const backButton = document.getElementById("backButton");
+    const searchBtn = document.getElementById("searchBtn");
+    const progressBar = document.getElementById("progressBar");
+    const resultsContainer = document.getElementById("results");
+    const searchBox = document.getElementById("searchBox");
+    const resultCountDiv = document.getElementById("resultCount");
+
+    fileInput.addEventListener("change", function(e) {
+      file = e.target.files[0];
+      if (!file) return;
+      offset = 0;
+      remainder = "";
+      matchCount = 0;
+      resultCountDiv.innerText = "";
+      resultsContainer.innerHTML = "";
+      uploadSection.classList.add("hidden");
+      searchSection.classList.remove("hidden");
+      window.scrollTo(0,0);
+    });
+
+    backButton.addEventListener("click", function() {
+      fileInput.value = "";
+      file = null;
+      offset = 0;
+      remainder = "";
+      query = "";
+      matchCount = 0;
+      searchBox.value = "";
+      progressBar.style.width = "0%";
+      resultCountDiv.innerText = "";
+      resultsContainer.innerHTML = "";
+      searchSection.classList.add("hidden");
+      uploadSection.classList.remove("hidden");
+      window.scrollTo(0,0);
+    });
+
+    searchBtn.addEventListener("click", function() {
+      query = searchBox.value.trim();
+      if(query === "") {
+        alert("يرجى إدخال نص للبحث");
+        return;
+      }
+      resultsContainer.innerHTML = "";
+      progressBar.style.width = "0%";
+      resultCountDiv.innerText = "";
+      offset = 0;
+      remainder = "";
+      matchCount = 0;
+      processChunk();
+    });
+
+    function processChunk() {
+      if(offset >= file.size) {
+        if(remainder) processText(remainder);
+        progressBar.style.width = "100%";
+        if(matchCount === 0) {
+          resultsContainer.innerHTML = "<div style='text-align: center; font-size:18px; color: red;'>لم يتم العثور على نتائج مطابقة، قم بتغيير الملف أو تعديل البحث</div>";
+        }
+        return;
+      }
+      const slice = file.slice(offset, offset + chunkSize);
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        let text = remainder + e.target.result;
+        let lines = text.split("\n");
+        remainder = lines.pop();
+        processText(lines.join("\n"));
+        offset += chunkSize;
+        progressBar.style.width = Math.floor((offset / file.size) * 100) + "%";
+        setTimeout(processChunk, 0);
+      };
+      reader.readAsText(slice);
+    }
+
+    function processText(text) {
+      let lines = text.split("\n");
+      lines.forEach(line => {
+        if(line.includes(query)) {
+          matchCount++;
+          resultCountDiv.innerText = "عدد النتائج: " + matchCount;
+          const fields = line.split(",");
+
+          let html = "";
+          let copyText = "";
+
+          if(fields[0] && fields[0].trim() !== "") {
+            html += "<span><i class='fas fa-calendar-alt'></i> تاريخ العقد: " + fields[0].trim() + "</span>";
+            copyText += "تاريخ العقد: " + fields[0].trim() + "\n";
+          }
+          if(fields[1] && fields[1].trim() !== "") {
+            html += "<span><i class='fas fa-id-card'></i> تاريخ الهوية: " + fields[1].trim() + "</span>";
+            copyText += "تاريخ الهوية: " + fields[1].trim() + "\n";
+          }
+          if(fields[2] && fields[2].trim() !== "") {
+            html += "<span><i class='fas fa-birthday-cake'></i> تاريخ الميلاد: " + fields[2].trim() + "</span>";
+            copyText += "تاريخ الميلاد: " + fields[2].trim() + "\n";
+          }
+          if(fields[3] && fields[3].trim() !== "") {
+            html += "<span><i class='fas fa-phone'></i> رقم الهاتف: " + fields[3].trim() + "</span>";
+            copyText += "رقم الهاتف: " + fields[3].trim() + "\n";
+          }
+          if(fields[4] && fields[4].trim() !== "") {
+            html += "<span><i class='fas fa-comment'></i> التعليق: " + fields[4].trim() + "</span>";
+            copyText += "التعليق: " + fields[4].trim() + "\n";
+          }
+          if(fields[5] && fields[5].trim() !== "") {
+            html += "<span><i class='fas fa-map-marker-alt'></i> المحافظة/المدينة: " + fields[5].trim() + "</span>";
+            copyText += "المحافظة/المدينة: " + fields[5].trim() + "\n";
+          }
+          if(fields[6] && fields[6].trim() !== "") {
+            html += "<span><i class='fas fa-user'></i> الاسم أو الحقل المخصص: " + fields[6].trim() + "</span>";
+            copyText += "الاسم أو الحقل المخصص: " + fields[6].trim() + "\n";
+          }
+
+          for(let i = 7; i < fields.length; i++){
+            if(fields[i] && fields[i].trim() !== "") {
+              html += "<span><i class='fas fa-info-circle'></i> معلومة إضافية " + (i - 6) + ": " + fields[i].trim() + "</span>";
+              copyText += "معلومة إضافية " + (i - 6) + ": " + fields[i].trim() + "\n";
+            }
+          }
+
+          if(html !== "") {
+            const div = document.createElement("div");
+            div.className = "result-item";
+            div.innerHTML = html + "<button class='copy-btn' data-copy='" + copyText.replace(/'/g, "&#39;") + "' onclick='copyText(this)'><i class=\"fas fa-copy\"></i> نسخ</button>";
+            resultsContainer.appendChild(div);
+          }
+        }
+      });
+    }
+
+    function copyText(el) {
+      const text = el.getAttribute("data-copy");
+      navigator.clipboard.writeText(text).then(() => {
+        el.textContent = "تم النسخ";
+        setTimeout(() => {
+          el.innerHTML = "<i class='fas fa-copy'></i> نسخ";
+        }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>
