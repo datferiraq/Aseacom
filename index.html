@@ -3,75 +3,84 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>داتابيس فيسبوك</title>
+  <title>داتابيس اسياسيل</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
   <style>
+    * {
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box;
+    }
     body {
-      margin: 0;
-      padding: 0;
       font-family: 'Cairo', sans-serif;
-      background: #f7f7f7;
-      color: #333;
+      background: linear-gradient(120deg, #24243e, #302b63, #0f0c29);
+      color: #fff;
       direction: rtl;
+      min-height: 100vh;
     }
     header {
-      background: #5563DE;
-      color: #fff;
-      padding: 15px;
-      font-size: 24px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(5px);
       text-align: center;
+      padding: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
     }
     .container {
-      padding: 20px;
-      max-width: 1000px;
+      width: 95%;
+      max-width: 1100px;
       margin: 0 auto;
+      padding: 20px;
     }
     .section {
-      margin-bottom: 20px;
-    }
-    .upload-section,
-    .search-section {
-      background: #fff;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(5px);
+      border-radius: 10px;
       padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
       transition: transform 0.3s ease;
     }
-    .upload-section:hover,
-    .search-section:hover {
-      transform: scale(1.02);
-    }
-    .hidden {
-      display: none;
+    .section:hover {
+      transform: translateY(-2px);
     }
     input[type="file"],
     input[type="text"] {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
       margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 4px;
       font-size: 16px;
+      outline: none;
+    }
+    input[type="file"] {
+      cursor: pointer;
+      background: #fff;
+      color: #333;
     }
     button {
       width: 100%;
-      padding: 12px;
-      background: #5563DE;
+      padding: 14px;
+      background: #4c8bf5;
       border: none;
-      border-radius: 4px;
+      border-radius: 8px;
       color: #fff;
       font-size: 18px;
+      font-weight: bold;
       cursor: pointer;
       transition: background 0.3s ease;
+      margin-top: 10px;
     }
     button:hover {
-      background: #3e4abb;
+      background: #3a73d0;
     }
     #progressContainer {
       width: 100%;
-      background: #ddd;
-      border-radius: 10px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 8px;
       overflow: hidden;
       height: 20px;
       margin: 15px 0;
@@ -79,7 +88,7 @@
     #progressBar {
       height: 100%;
       width: 0%;
-      background: #28a745;
+      background: #00d277;
       transition: width 0.2s ease;
     }
     .results {
@@ -88,110 +97,139 @@
       overflow-y: auto;
     }
     .result-item {
-      margin-bottom: 30px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 10px;
       padding: 15px;
-      border-bottom: 1px solid #eee;
-      word-wrap: break-word;
+      margin-bottom: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
       transition: background 0.3s ease;
-      background: #f9f9f9;
-      border-radius: 6px;
     }
     .result-item:hover {
-      background: #f0f0f0;
+      background: rgba(255,255,255,0.3);
     }
-    .result-item div {
-      margin: 8px 0;
+    .result-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .result-table th, .result-table td {
+      padding: 8px;
+      vertical-align: top;
+      text-align: right;
+      color: #fff;
       font-size: 16px;
     }
-    .result-item .label {
+    .result-table th {
+      width: 140px;
       font-weight: 700;
-      margin-right: 5px;
-      color: #5563DE;
+      white-space: nowrap;
+    }
+    .icon {
+      margin-left: 6px;
+      color: #00ffb3;
     }
     .copy-btn {
-      background: #5563DE;
-      border: none;
-      color: #fff;
-      padding: 6px 12px;
+      display: inline-block;
       margin-top: 10px;
-      border-radius: 4px;
+      padding: 8px 14px;
+      background: #00d277;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
       cursor: pointer;
       font-size: 14px;
       transition: background 0.3s ease;
     }
     .copy-btn:hover {
-      background: #3e4abb;
+      background: #00a85a;
     }
     .back-button {
+      display: inline-block;
       margin-bottom: 15px;
-      color: #5563DE;
+      color: #fff;
       cursor: pointer;
       font-size: 16px;
-    }
-    .back-button:hover {
       text-decoration: underline;
     }
-    @media (max-width: 600px) {
-      header { font-size: 20px; }
-      button { font-size: 16px; }
+    .back-button:hover {
+      color: #00ffb3;
     }
     #loginContainer {
-      font-family: 'Cairo', sans-serif;
-      text-align: center;
-      background: linear-gradient(135deg, #1e3c72, #2a5298);
-      color: white;
       display: flex;
       align-items: center;
       justify-content: center;
       height: 100vh;
     }
     #loginContainer .container {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(5px);
       padding: 30px;
       border-radius: 10px;
-      box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
-      width: 90%;
+      box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.4);
+      width: 95%;
       max-width: 400px;
       text-align: center;
     }
-    #loginContainer h2 { font-size: 24px; margin-bottom: 20px; }
-    #loginContainer label { display: block; margin-bottom: 10px; font-size: 18px; }
-    #loginContainer input { 
+    #loginContainer h2 {
+      font-size: 26px; 
+      margin-bottom: 20px;
+    }
+    #loginContainer label {
+      display: block; 
+      margin-bottom: 10px; 
+      font-size: 18px; 
+      font-weight: bold;
+    }
+    #loginContainer input {
       width: 100%; 
       padding: 12px; 
       border: none; 
-      border-radius: 5px; 
+      border-radius: 8px; 
       margin-bottom: 15px; 
       font-size: 18px; 
       text-align: center; 
-      background: rgba(255, 255, 255, 0.2); 
-      color: white; 
+      outline: none;
+      color: #333;
     }
-    #loginContainer input::placeholder { color: rgba(255, 255, 255, 0.7); }
-    #loginContainer button { 
+    #loginContainer input::placeholder {
+      color: #999;
+    }
+    #loginContainer button {
       width: 100%; 
-      padding: 12px; 
+      padding: 14px; 
       border: none; 
-      border-radius: 5px; 
+      border-radius: 8px; 
       cursor: pointer; 
       font-size: 18px; 
-      background: #4CAF50; 
-      color: white; 
+      background: #00d277; 
+      color: #fff; 
       transition: 0.3s; 
+      font-weight: bold;
     }
-    #loginContainer button:hover { background: #45a049; }
-    #loginContainer #error { 
+    #loginContainer button:hover {
+      background: #00a85a;
+    }
+    #loginContainer #error {
       color: #ff4d4d; 
       margin-top: 10px; 
       font-size: 16px; 
-      font-weight: bold; 
+      font-weight: bold;
     }
-    #loginContainer .footer { 
+    #loginContainer .footer {
       margin-top: 20px; 
       font-size: 14px; 
-      color: #ddd; 
+      color: #fff;
     }
-    #loginContainer .footer a { color: #ffcc00; text-decoration: none; font-weight: bold; }
+    #loginContainer .footer a {
+      color: #00ffb3; 
+      text-decoration: none; 
+      font-weight: bold;
+    }
+    @media (max-width: 600px) {
+      header { font-size: 20px; }
+      #loginContainer h2 { font-size: 22px; }
+      button { font-size: 16px; }
+      .result-table th, .result-table td { font-size: 14px; }
+    }
   </style>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
@@ -220,13 +258,12 @@
         }
       });
       if (isValid) {
-        alert(" الكود صحيح! سيتم توجيهك الآن.");
+        alert("✅ الكود صحيح! سيتم توجيهك الآن.");
         showSearchApp();
       } else {
         document.getElementById("error").innerText = "❌ الكود غير صحيح أو تم تعطيله.";
       }
     }
-
     window.verifyCode = verifyCode;
 
     function showSearchApp() {
@@ -251,7 +288,7 @@
   </div>
 
   <div id="searchApp" style="display: none;">
-    <header>قاعدة بيانات اسياسيل telegram:@caser7</header>
+    <header>داتابيس اسياسيل-زين@caser7</header>
     <div class="container">
       <div class="section upload-section" id="uploadSection">
         <input type="file" id="fileInput" accept=".txt">
@@ -331,7 +368,7 @@
         if(remainder) processText(remainder);
         progressBar.style.width = "100%";
         if(matchCount === 0) {
-          resultsContainer.innerHTML = "<div style='text-align: center; font-size:18px; color: red;'>لم يتم العثور على نتائج مطابقة، قم بتغيير الملف أو تعديل البحث</div>";
+          resultsContainer.innerHTML = "<div style='text-align: center; font-size:18px; color: #ff6666;'>لم يتم العثور على نتائج مطابقة، قم بتغيير الملف أو تعديل البحث</div>";
         }
         return;
       }
@@ -356,51 +393,76 @@
           matchCount++;
           resultCountDiv.innerText = "عدد النتائج: " + matchCount;
           const fields = line.split(",");
-
-          let html = "";
           let copyText = "";
+          let tableRows = "";
 
-          // يمكن تعديل تسميات الحقول حسب الحاجة
           if(fields[0] && fields[0].trim() !== "") {
-            html += "<div><span class='label'>الاسم:</span> " + fields[0].trim() + "</div>";
+            tableRows += `
+              <tr>
+                <th><i class="fas fa-user icon"></i>الاسم:</th>
+                <td>${fields[0].trim()}</td>
+              </tr>`;
             copyText += "الاسم: " + fields[0].trim() + "\n";
           }
           if(fields[1] && fields[1].trim() !== "") {
-            html += "<div><span class='label'>التفعيل:</span> " + fields[1].trim() + "</div>";
-            copyText += "التفعيل: " + fields[1].trim() + "\n";
+            tableRows += `
+              <tr>
+                <th><i class="fas fa-map-marker-alt icon"></i>المحافظه:</th>
+                <td>${fields[1].trim()}</td>
+              </tr>`;
+            copyText += "المحافظه: " + fields[1].trim() + "\n";
           }
           if(fields[2] && fields[2].trim() !== "") {
-            html += "<div><span class='label'>رقم الهاتف:</span> " + fields[2].trim() + "</div>";
-            copyText += "رقم الهاتف: " + fields[2].trim() + "\n";
+            tableRows += `
+              <tr>
+                <th><i class="fas fa-check-circle icon"></i>التفعيل:</th>
+                <td>${fields[2].trim()}</td>
+              </tr>`;
+            copyText += "التفعيل: " + fields[2].trim() + "\n";
           }
           if(fields[3] && fields[3].trim() !== "") {
-            html += "<div><span class='label'>المحافظة/المدينة:</span> " + fields[3].trim() + "</div>";
-            copyText += "المحافظة/المدينة: " + fields[3].trim() + "\n";
+            tableRows += `
+              <tr>
+                <th><i class="fas fa-phone icon"></i>الرقم:</th>
+                <td>${fields[3].trim()}</td>
+              </tr>`;
+            copyText += "الرقم: " + fields[3].trim() + "\n";
           }
           if(fields[4] && fields[4].trim() !== "") {
-            html += "<div><span class='label'>تاريخ الميلاد:</span> " + fields[4].trim() + "</div>";
-            copyText += "تاريخ الميلاد: " + fields[4].trim() + "\n";
+            tableRows += `
+              <tr>
+                <th><i class="fas fa-birthday-cake icon"></i>المواليد:</th>
+                <td>${fields[4].trim()}</td>
+              </tr>`;
+            copyText += "المواليد: " + fields[4].trim() + "\n";
           }
           if(fields[5] && fields[5].trim() !== "") {
-            html += "<div><span class='label'>تعليق:</span> " + fields[5].trim() + "</div>";
-            copyText += "تعليق: " + fields[5].trim() + "\n";
+            tableRows += `
+              <tr>
+                <th><i class="fas fa-id-card icon"></i>التومنيه:</th>
+                <td>${fields[5].trim()}</td>
+              </tr>`;
+            copyText += "التومنيه: " + fields[5].trim() + "\n";
           }
           if(fields[6] && fields[6].trim() !== "") {
-            html += "<div><span class='label'>تفاصيل إضافية 1:</span> " + fields[6].trim() + "</div>";
-            copyText += "تفاصيل إضافية 1: " + fields[6].trim() + "\n";
+            tableRows += `
+              <tr>
+                <th><i class="fas fa-clock icon"></i>تاريخ التفعيل:</th>
+                <td>${fields[6].trim()}</td>
+              </tr>`;
+            copyText += "تاريخ التفعيل: " + fields[6].trim() + "\n";
           }
-
-          for(let i = 7; i < fields.length; i++){
-            if(fields[i] && fields[i].trim() !== "") {
-              html += "<div><span class='label'>تفاصيل إضافية " + (i - 5) + ":</span> " + fields[i].trim() + "</div>";
-              copyText += "تفاصيل إضافية " + (i - 5) + ": " + fields[i].trim() + "\n";
-            }
-          }
-
-          if(html !== "") {
+          if(tableRows !== "") {
             const div = document.createElement("div");
             div.className = "result-item";
-            div.innerHTML = html + "<button class='copy-btn' data-copy='" + copyText.replace(/'/g, "&#39;") + "' onclick='copyText(this)'><i class=\"fas fa-copy\"></i> نسخ</button>";
+            div.innerHTML = `
+              <table class="result-table">
+                ${tableRows}
+              </table>
+              <button class='copy-btn' data-copy='${copyText.replace(/'/g, "&#39;")}' onclick='copyText(this)'>
+                <i class="fas fa-copy"></i> نسخ
+              </button>
+            `;
             resultsContainer.appendChild(div);
           }
         }
@@ -412,7 +474,7 @@
       navigator.clipboard.writeText(text).then(() => {
         el.textContent = "تم النسخ";
         setTimeout(() => {
-          el.innerHTML = "<i class='fas fa-copy'></i> نسخ";
+          el.innerHTML = `<i class="fas fa-copy"></i> نسخ`;
         }, 2000);
       });
     }
