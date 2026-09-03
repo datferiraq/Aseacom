@@ -1,483 +1,647 @@
 <!DOCTYPE html>
-<html lang="ar">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>داتابيس اسياسيل</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
-  <style>
-    * {
-      margin: 0; 
-      padding: 0; 
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Cairo', sans-serif;
-      background: linear-gradient(120deg, #24243e, #302b63, #0f0c29);
-      color: #fff;
-      direction: rtl;
-      min-height: 100vh;
-    }
-    header {
-      background: rgba(255,255,255,0.1);
-      backdrop-filter: blur(5px);
-      text-align: center;
-      padding: 20px;
-      font-size: 24px;
-      font-weight: bold;
-      border-bottom: 1px solid rgba(255,255,255,0.2);
-    }
-    .container {
-      width: 95%;
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    .section {
-      background: rgba(255,255,255,0.1);
-      backdrop-filter: blur(5px);
-      border-radius: 10px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      transition: transform 0.3s ease;
-    }
-    .section:hover {
-      transform: translateY(-2px);
-    }
-    input[type="file"],
-    input[type="text"] {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      margin: 10px 0;
-      font-size: 16px;
-      outline: none;
-    }
-    input[type="file"] {
-      cursor: pointer;
-      background: #fff;
-      color: #333;
-    }
-    button {
-      width: 100%;
-      padding: 14px;
-      background: #4c8bf5;
-      border: none;
-      border-radius: 8px;
-      color: #fff;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s ease;
-      margin-top: 10px;
-    }
-    button:hover {
-      background: #3a73d0;
-    }
-    #progressContainer {
-      width: 100%;
-      background: rgba(255,255,255,0.2);
-      border-radius: 8px;
-      overflow: hidden;
-      height: 20px;
-      margin: 15px 0;
-    }
-    #progressBar {
-      height: 100%;
-      width: 0%;
-      background: #00d277;
-      transition: width 0.2s ease;
-    }
-    .results {
-      margin-top: 20px;
-      max-height: 500px;
-      overflow-y: auto;
-    }
-    .result-item {
-      background: rgba(255,255,255,0.2);
-      border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 20px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-      transition: background 0.3s ease;
-    }
-    .result-item:hover {
-      background: rgba(255,255,255,0.3);
-    }
-    .result-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    .result-table th, .result-table td {
-      padding: 8px;
-      vertical-align: top;
-      text-align: right;
-      color: #fff;
-      font-size: 16px;
-    }
-    .result-table th {
-      width: 140px;
-      font-weight: 700;
-      white-space: nowrap;
-    }
-    .icon {
-      margin-left: 6px;
-      color: #00ffb3;
-    }
-    .copy-btn {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 8px 14px;
-      background: #00d277;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: background 0.3s ease;
-    }
-    .copy-btn:hover {
-      background: #00a85a;
-    }
-    .back-button {
-      display: inline-block;
-      margin-bottom: 15px;
-      color: #fff;
-      cursor: pointer;
-      font-size: 16px;
-      text-decoration: underline;
-    }
-    .back-button:hover {
-      color: #00ffb3;
-    }
-    #loginContainer {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-    #loginContainer .container {
-      background: rgba(255,255,255,0.1);
-      backdrop-filter: blur(5px);
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.4);
-      width: 95%;
-      max-width: 400px;
-      text-align: center;
-    }
-    #loginContainer h2 {
-      font-size: 26px; 
-      margin-bottom: 20px;
-    }
-    #loginContainer label {
-      display: block; 
-      margin-bottom: 10px; 
-      font-size: 18px; 
-      font-weight: bold;
-    }
-    #loginContainer input {
-      width: 100%; 
-      padding: 12px; 
-      border: none; 
-      border-radius: 8px; 
-      margin-bottom: 15px; 
-      font-size: 18px; 
-      text-align: center; 
-      outline: none;
-      color: #333;
-    }
-    #loginContainer input::placeholder {
-      color: #999;
-    }
-    #loginContainer button {
-      width: 100%; 
-      padding: 14px; 
-      border: none; 
-      border-radius: 8px; 
-      cursor: pointer; 
-      font-size: 18px; 
-      background: #00d277; 
-      color: #fff; 
-      transition: 0.3s; 
-      font-weight: bold;
-    }
-    #loginContainer button:hover {
-      background: #00a85a;
-    }
-    #loginContainer #error {
-      color: #ff4d4d; 
-      margin-top: 10px; 
-      font-size: 16px; 
-      font-weight: bold;
-    }
-    #loginContainer .footer {
-      margin-top: 20px; 
-      font-size: 14px; 
-      color: #fff;
-    }
-    #loginContainer .footer a {
-      color: #00ffb3; 
-      text-decoration: none; 
-      font-weight: bold;
-    }
-    @media (max-width: 600px) {
-      header { font-size: 20px; }
-      #loginContainer h2 { font-size: 22px; }
-      button { font-size: 16px; }
-      .result-table th, .result-table td { font-size: 14px; }
-    }
-  </style>
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyAzeOYd4_rppBX_qvYOvgXj6le6FEyO1ac",
-      authDomain: "database-87036.firebaseapp.com",
-      projectId: "database-87036",
-      storageBucket: "database-87036.firebasestorage.app",
-      messagingSenderId: "147777098452",
-      appId: "1:147777098452:web:c1c4c305d5e6e0cf0c2141",
-      measurementId: "G-8S0XCNF1Y7"
-    };
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    async function verifyCode() {
-      const userCode = document.getElementById("userCode").value.trim().toUpperCase();
-      const querySnapshot = await getDocs(collection(db, "codes"));
-      let isValid = false;
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        if (data.code === userCode && data.isActive) {
-          isValid = true;
-        }
-      });
-      if (isValid) {
-        alert("✅ الكود صحيح! سيتم توجيهك الآن.");
-        showSearchApp();
-      } else {
-        document.getElementById("error").innerText = "❌ الكود غير صحيح أو تم تعطيله.";
-      }
-    }
-    window.verifyCode = verifyCode;
-
-    function showSearchApp() {
-      document.getElementById("loginContainer").style.display = "none";
-      document.getElementById("searchApp").style.display = "block";
-    }
-  </script>
+<html lang="ar" dir="rtl">
+<head><style>
+@font-face {
+  font-family: "Optimistic";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("/fonts/OptimisticAI_VF_Optimized.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Optimistic Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/OptimisticMono_W_TextRegular.woff2") format("woff2");
+}
+:where(html) {
+  font-family: "Optimistic", system-ui, sans-serif;
+}
+:where(code, pre, kbd, samp) {
+  font-family: "Optimistic Mono", ui-monospace, monospace;
+}
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>داتابيس اسياسيل PRO - @caser7</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Cairo', sans-serif;
+  background: #060a16;
+  color: #fff;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+body::before {
+  content: '';
+  position: fixed;
+  top: -15%;
+  left: -15%;
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, rgba(227,6,19,0.22), transparent 60%);
+  filter: blur(60px);
+  z-index: -3;
+}
+body::after {
+  content: '';
+  position: fixed;
+  bottom: -20%;
+  right: -10%;
+  width: 900px;
+  height: 900px;
+  background: radial-gradient(circle, rgba(0,255,148,0.16), transparent 60%);
+  filter: blur(70px);
+  z-index: -3;
+}
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(6,10,22,0.88);
+  backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.logo { display: flex; align-items: center; gap: 14px; }
+.logo-icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #e30613, #ff1e30);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 25px rgba(227,6,19,0.45);
+}
+.logo-text h1 { font-size: 20px; font-weight: 900; }
+.logo-text span { font-size: 11px; color: rgba(255,255,255,0.55); }
+.container { width: 95%; max-width: 1180px; margin: 0 auto; padding: 24px 20px; }
+.card {
+  background: rgba(255,255,255,0.07);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 20px;
+  padding: 26px;
+  margin-bottom: 20px;
+  box-shadow: 0 15px 50px rgba(0,0,0,0.35);
+}
+input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+  background: rgba(0,0,0,0.35);
+  color: #fff;
+  font-family: 'Cairo';
+  font-size: 15px;
+  outline: none;
+}
+input:focus { border-color: #e30613; }
+.btn-primary {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(135deg, #e30613, #ff2d3f);
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 17px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.btn-sec {
+  padding: 10px 18px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+}
+#loginContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+.login-card { max-width: 440px; width: 100%; text-align: center; }
+.prov-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px,1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+.prov-chip {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 700;
+}
+.prov-chip.active {
+  background: linear-gradient(135deg, #e30613, #ff1e30);
+  border-color: #e30613;
+  box-shadow: 0 8px 25px rgba(227,6,19,0.4);
+}
+#progressContainer {
+  width: 100%;
+  background: rgba(255,255,255,0.08);
+  border-radius: 12px;
+  overflow: hidden;
+  height: 20px;
+  margin: 16px 0;
+  display: none;
+}
+#progressBar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #00ff94, #4c8bf5);
+  transition: width 0.25s;
+}
+.results { margin-top: 16px; max-height: 650px; overflow-y: auto; }
+.result-item {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-right: 4px solid #00ff94;
+  border-radius: 14px;
+  padding: 18px;
+  margin-bottom: 14px;
+}
+.hidden { display: none !important; }
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0f172a;
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 14px 22px;
+  border-radius: 14px;
+  z-index: 300;
+  display: none;
+}
+.toast.show { display: flex; }
+</style>
+<script src="https://www.gstatic.com/firebasejs/11.4.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
-  <div id="loginContainer">
-    <div class="container">
-      <h2>تسجيل الدخول</h2>
-      <label for="userCode">كود التفعيل:</label>
-      <input type="text" id="userCode" placeholder="أدخل كود التفعيل">
-      <button onclick="verifyCode()">تسجيل الدخول</button>
-      <div id="error"></div>
-      <div class="footer">
-        للحصول على كود تفعيل تواصل مع المطور 
-        <a href="https://t.me/caser7" target="_blank">telegram:@caser7</a>
+
+<div id="loginContainer">
+  <div class="card login-card">
+    <div style="width:88px;height:88px;background:linear-gradient(135deg,#e30613,#ff1a2d);border-radius:22px;margin:0 auto 22px;display:flex;align-items:center;justify-content:center;font-size:38px">📂</div>
+    <h2 style="font-size:26px;font-weight:900">Asiacell</h2>
+    <p style="color:rgba(255,255,255,0.6);font-size:14px;margin-bottom:22px">داتابيس اسياسيل - زين @caser7 • PRO</p>
+    <label style="display:block;margin-bottom:10px;font-weight:800;text-align:right">كود التفعيل:</label>
+    <input type="text" id="userCode" placeholder="أدخل كود التفعيل">
+    <button class="btn-primary" style="margin-top:16px" onclick="verifyCode()">تسجيل الدخول</button>
+    <div id="error" style="color:#ff4d4d;margin-top:12px;font-weight:800;min-height:22px;font-size:13px"></div>
+    <div style="margin-top:18px;font-size:13px">
+      <a href="https://t.me/caser7" target="_blank" style="color:#00ff94;text-decoration:none;font-weight:800">telegram:@caser7</a>
+    </div>
+    <div style="margin-top:15px;padding:12px;background:rgba(0,255,148,0.1);border:1px solid rgba(0,255,148,0.2);border-radius:12px;font-size:11px;color:#00ff94;font-weight:700">
+      نسخة كيت هاب المضمونة - التصميم القديم القوي
+    </div>
+    <div id="debug" style="margin-top:10px;font-size:9px;color:rgba(255,255,255,0.3);text-align:left;direction:ltr"></div>
+  </div>
+</div>
+
+<div id="searchApp" class="hidden">
+  <header>
+    <div class="logo">
+      <div class="logo-icon">📶</div>
+      <div class="logo-text">
+        <h1>داتابيس اسياسيل</h1>
+        <span>PREMIUM @caser7</span>
       </div>
     </div>
-  </div>
-
-  <div id="searchApp" style="display: none;">
-    <header>داتابيس اسياسيل-زين@caser7</header>
-    <div class="container">
-      <div class="section upload-section" id="uploadSection">
-        <input type="file" id="fileInput" accept=".txt">
+    <div style="display:flex;gap:10px">
+      <button class="btn-sec" onclick="logout()">خروج</button>
+    </div>
+  </header>
+  <div class="container">
+    <div class="card" id="uploadSection">
+      <h3 style="margin-bottom:14px;font-weight:800">📁 رفع الملفات</h3>
+      <div style="border:2px dashed rgba(255,255,255,0.18);border-radius:16px;padding:36px 20px;text-align:center;cursor:pointer" onclick="document.getElementById('fileInput').click()" id="dropZone">
+        <div style="font-size:42px;margin-bottom:12px">📤</div>
+        <div style="font-weight:800;margin-bottom:6px">اسحب الملفات هنا او اضغط للاختيار</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.5)">يدعم .txt فقط • متعدد الملفات</div>
+        <input type="file" id="fileInput" accept=".txt" multiple hidden>
       </div>
-      <div class="section search-section hidden" id="searchSection">
-        <div class="back-button" id="backButton">&#8592; رجوع</div>
-        <input type="text" id="searchBox" placeholder="اكتب ما تريد البحث عنه">
-        <button id="searchBtn">بحث</button>
-        <div id="progressContainer">
-          <div id="progressBar"></div>
+      <div id="fileList" style="margin-top:14px"></div>
+    </div>
+
+    <div class="card hidden" id="searchSection">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <div style="cursor:pointer;color:#00ff94;font-weight:800" onclick="goBack()">← رجوع</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.5)" id="filesInfo"></div>
+      </div>
+      <input type="text" id="searchBox" placeholder="اكتب ما تريد البحث عنه...">
+      <div style="display:flex;gap:10px;margin-top:12px">
+        <button class="btn-primary" id="searchBtn" style="flex:1" onclick="startSearch()">بحث الآن</button>
+        <button class="btn-sec hidden" id="cancelBtn" onclick="cancelSearch()">الغاء</button>
+      </div>
+
+      <div style="margin-top:20px;background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:16px">
+        <div style="display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="toggleProvince()">
+          <h4 style="font-weight:800">📍 فلترة حسب المحافظة</h4>
+          <span id="provChevron">▼</span>
         </div>
-        <div id="resultCount" style="margin-bottom: 10px; font-size: 18px; font-weight: bold;"></div>
-        <div class="results" id="results"></div>
+        <div id="provinceContainer" class="hidden">
+          <div style="display:flex;gap:8px;margin:14px 0 10px">
+            <button class="btn-sec" style="font-size:12px" onclick="selectAllProv()">الكل</button>
+            <button class="btn-sec" style="font-size:12px" onclick="clearProv()">مسح</button>
+            <span id="selectedProvText" style="font-size:12px;color:#00ff94;margin-right:auto;line-height:34px;font-weight:700"></span>
+          </div>
+          <div class="prov-grid" id="provinceGrid"></div>
+        </div>
       </div>
+
+      <div id="progressContainer"><div id="progressBar"></div></div>
+      <div style="display:flex;gap:12px;margin:14px 0;font-size:13px;color:rgba(255,255,255,0.7)">
+        <span id="resultCount" style="font-weight:800;color:#00ff94;font-size:14px"></span>
+        <span id="searchStats"></span>
+      </div>
+      <div class="results" id="results"></div>
     </div>
   </div>
+</div>
 
-  <script>
-    let file, chunkSize = 1024 * 1024, offset = 0, remainder = "", query = "";
-    let matchCount = 0;
-    const fileInput = document.getElementById("fileInput");
-    const uploadSection = document.getElementById("uploadSection");
-    const searchSection = document.getElementById("searchSection");
-    const backButton = document.getElementById("backButton");
-    const searchBtn = document.getElementById("searchBtn");
-    const progressBar = document.getElementById("progressBar");
-    const resultsContainer = document.getElementById("results");
-    const searchBox = document.getElementById("searchBox");
-    const resultCountDiv = document.getElementById("resultCount");
+<div class="toast" id="toast"><span id="toastText" style="font-weight:800"></span></div>
 
-    fileInput.addEventListener("change", function(e) {
-      file = e.target.files[0];
-      if (!file) return;
-      offset = 0;
-      remainder = "";
-      matchCount = 0;
-      resultCountDiv.innerText = "";
-      resultsContainer.innerHTML = "";
-      uploadSection.classList.add("hidden");
-      searchSection.classList.remove("hidden");
-      window.scrollTo(0,0);
+<script>
+const debugEl = document.getElementById('debug');
+function logDebug(msg){
+  console.log(msg);
+  if(debugEl) debugEl.innerHTML += msg + '<br>';
+}
+
+let db;
+try{
+  const firebaseConfig = {
+    apiKey: "AIzaSyAzeOYd4_rppBX_qvYOvgXj6le6FEyO1ac",
+    authDomain: "database-87036.firebaseapp.com",
+    projectId: "database-87036",
+    storageBucket: "database-87036.firebasestorage.app",
+    messagingSenderId: "147777098452",
+    appId: "1:147777098452:web:c1c4c305d5e6e0cf0c2141"
+  };
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.firestore();
+  logDebug('Firebase OK');
+}catch(e){
+  logDebug('Firebase Error: ' + e.message);
+}
+
+let files = [];
+let chunkSize = 1048576;
+let query = "";
+let allResults = [];
+let isSearching = false;
+let shouldCancel = false;
+let startTime = 0;
+let selectedProvinces = new Set();
+let provinceCounts = {};
+let maxResults = 200;
+
+const provinces = [
+  "بغداد","البصرة","نينوى","أربيل",
+  "النجف","كربلاء","بابل","الأنبار",
+  "ديالى","ذي قار","السليمانية","صلاح الدين",
+  "واسط","ميسان","المثنى","القادسية",
+  "دهوك","كركوك"
+];
+
+function initProvinces(){
+  const grid = document.getElementById('provinceGrid');
+  grid.innerHTML = '';
+  provinces.forEach(function(p){
+    const div = document.createElement('div');
+    div.className = 'province-chip';
+    div.dataset.prov = p;
+    div.innerHTML = '<span>' + p + '</span><span style="font-size:11px;background:rgba(0,0,0,0.35);padding:3px 7px;border-radius:20px" id="cnt-' + p + '">0</span>';
+    div.onclick = function(){ toggleProv(p); };
+    grid.appendChild(div);
+  });
+}
+
+function toggleProv(p){
+  if(selectedProvinces.has(p)) selectedProvinces.delete(p);
+  else selectedProvinces.add(p);
+  updateProvUI();
+  if(allResults.length>0) filterAndRender();
+}
+
+function updateProvUI(){
+  document.querySelectorAll('.province-chip').forEach(function(ch){
+    ch.classList.toggle('active', selectedProvinces.has(ch.dataset.prov));
+  });
+  const txt = document.getElementById('selectedProvText');
+  if(txt) txt.textContent = selectedProvinces.size===0 ? '' : 'المحدد: ' + Array.from(selectedProvinces).join('، ');
+}
+
+function selectAllProv(){
+  provinces.forEach(function(p){ selectedProvinces.add(p); });
+  updateProvUI();
+  if(allResults.length>0) filterAndRender();
+}
+
+function clearProv(){
+  selectedProvinces.clear();
+  updateProvUI();
+  if(allResults.length>0) filterAndRender();
+}
+
+function toggleProvince(){
+  const c = document.getElementById('provinceContainer');
+  const ch = document.getElementById('provChevron');
+  c.classList.toggle('hidden');
+  if(ch) ch.textContent = c.classList.contains('hidden') ? '▼' : '▲';
+}
+
+async function verifyCode(){
+  const codeEl = document.getElementById('userCode');
+  const userCode = codeEl.value.trim().toUpperCase();
+  const errorEl = document.getElementById('error');
+  if(!userCode){ showToast('ادخل الكود'); return; }
+  const btn = codeEl.nextElementSibling;
+  const orig = btn.innerHTML;
+  btn.innerHTML = 'جاري التحقق...';
+  btn.disabled = true;
+  errorEl.innerText = '';
+  try{
+    if(!db) throw new Error('Firebase غير جاهز');
+    const qs = await db.collection("codes").get();
+    let ok = false;
+    qs.forEach(function(doc){
+      const data = doc.data();
+      if(data.code === userCode && data.isActive) ok = true;
     });
-
-    backButton.addEventListener("click", function() {
-      fileInput.value = "";
-      file = null;
-      offset = 0;
-      remainder = "";
-      query = "";
-      matchCount = 0;
-      searchBox.value = "";
-      progressBar.style.width = "0%";
-      resultCountDiv.innerText = "";
-      resultsContainer.innerHTML = "";
-      searchSection.classList.add("hidden");
-      uploadSection.classList.remove("hidden");
-      window.scrollTo(0,0);
-    });
-
-    searchBtn.addEventListener("click", function() {
-      query = searchBox.value.trim();
-      if(query === "") {
-        alert("يرجى إدخال نص للبحث");
-        return;
-      }
-      resultsContainer.innerHTML = "";
-      progressBar.style.width = "0%";
-      resultCountDiv.innerText = "";
-      offset = 0;
-      remainder = "";
-      matchCount = 0;
-      processChunk();
-    });
-
-    function processChunk() {
-      if(offset >= file.size) {
-        if(remainder) processText(remainder);
-        progressBar.style.width = "100%";
-        if(matchCount === 0) {
-          resultsContainer.innerHTML = "<div style='text-align: center; font-size:18px; color: #ff6666;'>لم يتم العثور على نتائج مطابقة، قم بتغيير الملف أو تعديل البحث</div>";
-        }
-        return;
-      }
-      const slice = file.slice(offset, offset + chunkSize);
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        let text = remainder + e.target.result;
-        let lines = text.split("\n");
-        remainder = lines.pop();
-        processText(lines.join("\n"));
-        offset += chunkSize;
-        progressBar.style.width = Math.floor((offset / file.size) * 100) + "%";
-        setTimeout(processChunk, 0);
-      };
-      reader.readAsText(slice);
+    if(ok){
+      showToast('✅ الكود صحيح!');
+      document.getElementById('loginContainer').classList.add('hidden');
+      document.getElementById('searchApp').classList.remove('hidden');
+      initProvinces();
+    } else {
+      errorEl.innerText = '❌ الكود غير صحيح أو معطل';
     }
+  }catch(e){
+    errorEl.innerText = 'خطأ: ' + e.message;
+  }
+  btn.innerHTML = orig;
+  btn.disabled = false;
+}
 
-    function processText(text) {
-      let lines = text.split("\n");
-      lines.forEach(line => {
-        if(line.includes(query)) {
-          matchCount++;
-          resultCountDiv.innerText = "عدد النتائج: " + matchCount;
-          const fields = line.split(",");
-          let copyText = "";
-          let tableRows = "";
+const fileInput = document.getElementById('fileInput');
+const dropZone = document.getElementById('dropZone');
 
-          if(fields[0] && fields[0].trim() !== "") {
-            tableRows += `
-              <tr>
-                <th><i class="fas fa-user icon"></i>الاسم:</th>
-                <td>${fields[0].trim()}</td>
-              </tr>`;
-            copyText += "الاسم: " + fields[0].trim() + "\n";
-          }
-          if(fields[1] && fields[1].trim() !== "") {
-            tableRows += `
-              <tr>
-                <th><i class="fas fa-map-marker-alt icon"></i>المحافظه:</th>
-                <td>${fields[1].trim()}</td>
-              </tr>`;
-            copyText += "المحافظه: " + fields[1].trim() + "\n";
-          }
-          if(fields[2] && fields[2].trim() !== "") {
-            tableRows += `
-              <tr>
-                <th><i class="fas fa-check-circle icon"></i>التفعيل:</th>
-                <td>${fields[2].trim()}</td>
-              </tr>`;
-            copyText += "التفعيل: " + fields[2].trim() + "\n";
-          }
-          if(fields[3] && fields[3].trim() !== "") {
-            tableRows += `
-              <tr>
-                <th><i class="fas fa-phone icon"></i>الرقم:</th>
-                <td>${fields[3].trim()}</td>
-              </tr>`;
-            copyText += "الرقم: " + fields[3].trim() + "\n";
-          }
-          if(fields[4] && fields[4].trim() !== "") {
-            tableRows += `
-              <tr>
-                <th><i class="fas fa-birthday-cake icon"></i>المواليد:</th>
-                <td>${fields[4].trim()}</td>
-              </tr>`;
-            copyText += "المواليد: " + fields[4].trim() + "\n";
-          }
-          if(fields[5] && fields[5].trim() !== "") {
-            tableRows += `
-              <tr>
-                <th><i class="fas fa-id-card icon"></i>التومنيه:</th>
-                <td>${fields[5].trim()}</td>
-              </tr>`;
-            copyText += "التومنيه: " + fields[5].trim() + "\n";
-          }
-          if(fields[6] && fields[6].trim() !== "") {
-            tableRows += `
-              <tr>
-                <th><i class="fas fa-clock icon"></i>تاريخ التفعيل:</th>
-                <td>${fields[6].trim()}</td>
-              </tr>`;
-            copyText += "تاريخ التفعيل: " + fields[6].trim() + "\n";
-          }
-          if(tableRows !== "") {
-            const div = document.createElement("div");
-            div.className = "result-item";
-            div.innerHTML = `
-              <table class="result-table">
-                ${tableRows}
-              </table>
-              <button class='copy-btn' data-copy='${copyText.replace(/'/g, "&#39;")}' onclick='copyText(this)'>
-                <i class="fas fa-copy"></i> نسخ
-              </button>
-            `;
-            resultsContainer.appendChild(div);
-          }
-        }
+if(dropZone){
+  dropZone.addEventListener('dragover', function(e){
+    e.preventDefault();
+    dropZone.style.background = 'rgba(0,255,148,0.1)';
+  });
+  dropZone.addEventListener('dragleave', function(){
+    dropZone.style.background = '';
+  });
+  dropZone.addEventListener('drop', function(e){
+    e.preventDefault();
+    dropZone.style.background = '';
+    handleFiles(e.dataTransfer.files);
+  });
+}
+
+if(fileInput){
+  fileInput.addEventListener('change', function(e){
+    handleFiles(e.target.files);
+  });
+}
+
+function handleFiles(fl){
+  files = Array.from(fl);
+  renderFileList();
+  if(files.length>0){
+    document.getElementById('uploadSection').classList.add('hidden');
+    document.getElementById('searchSection').classList.remove('hidden');
+    document.getElementById('filesInfo').textContent = files.length + ' ملفات';
+    resetSearch();
+  }
+}
+
+function renderFileList(){
+  const list = document.getElementById('fileList');
+  list.innerHTML = '';
+  files.forEach(function(f,i){
+    const div = document.createElement('div');
+    div.style.cssText = 'display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px 16px;margin-bottom:8px';
+    div.innerHTML = '<span>📄 ' + f.name + ' (' + (f.size/1024).toFixed(1) + ' KB)</span><span style="cursor:pointer" onclick="removeFile(' + i + ')">✕</span>';
+    list.appendChild(div);
+  });
+}
+
+function removeFile(i){
+  files.splice(i,1);
+  renderFileList();
+  if(files.length===0) goBack();
+}
+
+function goBack(){
+  files = [];
+  if(fileInput) fileInput.value = '';
+  document.getElementById('fileList').innerHTML = '';
+  document.getElementById('searchSection').classList.add('hidden');
+  document.getElementById('uploadSection').classList.remove('hidden');
+  resetSearch();
+}
+
+function resetSearch(){
+  allResults = [];
+  provinceCounts = {};
+  document.getElementById('results').innerHTML = '';
+  document.getElementById('resultCount').textContent = '';
+  document.getElementById('progressBar').style.width = '0%';
+  document.getElementById('progressContainer').style.display = 'none';
+}
+
+function startSearch(){
+  query = document.getElementById('searchBox').value.trim();
+  if(!query){ showToast('اكتب كلمة البحث'); return; }
+  if(files.length===0){ showToast('اختار ملف'); return; }
+  resetSearch();
+  isSearching = true;
+  shouldCancel = false;
+  startTime = performance.now();
+  document.getElementById('progressContainer').style.display = 'block';
+  document.getElementById('searchBtn').classList.add('hidden');
+  document.getElementById('cancelBtn').classList.remove('hidden');
+  processNextFile(0);
+}
+
+let currentFileIndex = 0;
+let currentOffset = 0;
+let currentRemainder = '';
+
+function processNextFile(idx){
+  if(shouldCancel){ endSearch(); return; }
+  if(idx>=files.length){ endSearch(); return; }
+  currentFileIndex = idx;
+  currentOffset = 0;
+  currentRemainder = '';
+  processChunkFile(files[idx], function(){ processNextFile(idx+1); });
+}
+
+function processChunkFile(file, done){
+  if(shouldCancel){ done(); return; }
+  if(currentOffset>=file.size){
+    if(currentRemainder) processText(currentRemainder, file.name);
+    done();
+    return;
+  }
+  const slice = file.slice(currentOffset, currentOffset+chunkSize);
+  const reader = new FileReader();
+  reader.onload = function(e){
+    let text = currentRemainder + e.target.result;
+    let lines = text.split("\n");
+    currentRemainder = lines.pop();
+    processText(lines.join("\n"), file.name);
+    currentOffset += chunkSize;
+    const totalProcessed = files.slice(0,currentFileIndex).reduce(function(s,f){return s+f.size;},0)+currentOffset;
+    const totalSize = files.reduce(function(s,f){return s+f.size;},0);
+    document.getElementById('progressBar').style.width = Math.floor((totalProcessed/totalSize)*100) + '%';
+    setTimeout(function(){ processChunkFile(file,done); },0);
+  };
+  reader.readAsText(slice);
+}
+
+function processText(text,fileName){
+  const lines = text.split("\n");
+  lines.forEach(function(line){
+    if(line.indexOf(query)===-1) return;
+    const fields = line.split(',');
+    const prov = fields[1] ? fields[1].trim() : 'غير معروف';
+    if(selectedProvinces.size>0){
+      let ok = false;
+      selectedProvinces.forEach(function(sp){
+        if(prov.indexOf(sp)!==-1) ok = true;
       });
+      if(!ok) return;
     }
+    provinceCounts[prov] = (provinceCounts[prov]||0)+1;
+    allResults.push({fields:fields,fileName:fileName});
+  });
+  filterAndRender(true);
+}
 
-    function copyText(el) {
-      const text = el.getAttribute("data-copy");
-      navigator.clipboard.writeText(text).then(() => {
-        el.textContent = "تم النسخ";
-        setTimeout(() => {
-          el.innerHTML = `<i class="fas fa-copy"></i> نسخ`;
-        }, 2000);
-      });
+function filterAndRender(isLive){
+  const container = document.getElementById('results');
+  Object.keys(provinceCounts).forEach(function(p){
+    const el = document.getElementById('cnt-' + p);
+    if(el) el.textContent = provinceCounts[p];
+  });
+  let filtered = allResults;
+  if(selectedProvinces.size>0){
+    filtered = allResults.filter(function(r){
+      const prov = r.fields[1] ? r.fields[1].trim() : '';
+      for(let sp of selectedProvinces){
+        if(prov.indexOf(sp)!==-1) return true;
+      }
+      return false;
+    });
+  }
+  const toShow = filtered.slice(0, maxResults);
+  container.innerHTML = '';
+  toShow.forEach(function(item){
+    const fields = item.fields;
+    let rows = '';
+    let copyText = '';
+    function addRow(label,val){
+      if(!val) return '';
+      copyText += label + ': ' + val + '\n';
+      return '<tr><th style="width:120px;color:#00ff94;padding:6px 0;text-align:right">' + label + ':</th><td style="padding:6px 0">' + val + '</td></tr>';
     }
-  </script>
-</body>
+    rows += addRow('الاسم', fields[0] ? fields[0].trim() : '');
+    rows += addRow('المحافظه', fields[1] ? fields[1].trim() : '');
+    rows += addRow('الرقم', fields[3] ? fields[3].trim() : '');
+    if(!rows) return;
+    const div = document.createElement('div');
+    div.className = 'result-item';
+    div.innerHTML = '<div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="font-size:11px;background:rgba(0,0,0,0.4);padding:4px 10px;border-radius:20px">' + item.fileName + '</span><span style="font-size:11px;background:rgba(227,6,19,0.2);padding:4px 10px;border-radius:20px">' + (fields[1] ? fields[1].trim() : '') + '</span></div><table style="width:100%">' + rows + '</table><button style="margin-top:10px;padding:8px 16px;background:#00ff94;border:none;border-radius:8px;color:#000;font-weight:800;cursor:pointer" data-copy="' + copyText.replace(/'/g,"&#39;") + '" onclick="copyFromData(this)">نسخ</button>';
+    container.appendChild(div);
+  });
+  document.getElementById('resultCount').textContent = 'عدد النتائج: ' + filtered.length;
+  if(!isLive && filtered.length===0 && !isSearching){
+    container.innerHTML = "<div style='text-align:center;padding:30px;color:#ff6b6b'>لم يتم العثور على نتائج</div>";
+  }
+}
+
+function endSearch(){
+  isSearching = false;
+  document.getElementById('progressContainer').style.display = 'none';
+  document.getElementById('searchBtn').classList.remove('hidden');
+  document.getElementById('cancelBtn').classList.add('hidden');
+  document.getElementById('progressBar').style.width = '100%';
+  filterAndRender();
+}
+
+function cancelSearch(){ shouldCancel = true; showToast('تم الغاء البحث'); }
+
+function copyFromData(el){
+  const txt = el.getAttribute('data-copy').replace(/&#39;/g,"'");
+  navigator.clipboard.writeText(txt).then(function(){
+    el.textContent = 'تم النسخ';
+    setTimeout(function(){ el.textContent = 'نسخ'; },2000);
+    showToast('تم النسخ');
+  });
+}
+
+function logout(){
+  document.getElementById('searchApp').classList.add('hidden');
+  document.getElementById('loginContainer').classList.remove('hidden');
+  goBack();
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  const tt = document.getElementById('toastText');
+  if(!t||!tt) return;
+  tt.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); },3000);
+}
+
+function toggleProvince(){
+  const c = document.getElementById('provinceContainer');
+  c.classList.toggle('hidden');
+}
+function selectAllProv(){
+  provinces.forEach(function(p){ selectedProvinces.add(p); });
+  updateProvUI();
+  if(allResults.length>0) filterAndRender();
+}
+function clearProv(){
+  selectedProvinces.clear();
+  updateProvUI();
+  if(allResults.length>0) filterAndRender();
+}
+function goBack(){
+  files = [];
+  if(fileInput) fileInput.value = '';
+  document.getElementById('fileList').innerHTML = '';
+  document.getElementById('searchSection').classList.add('hidden');
+  document.getElementById('uploadSection').classList.remove('hidden');
+  resetSearch();
+}
+</script>
+<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body>
 </html>
